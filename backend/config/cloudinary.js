@@ -11,26 +11,25 @@ cloudinary.config({
 
 
 
-const uploadOnCloudinary = async (filePath) => {
+const uploadOnCloudinary = async (fileBuffer) => {
   try {
-    const uploadResult = await cloudinary.uploader.upload(filePath);
+    const uploadResult = await cloudinary.uploader.upload_stream(
+      { resource_type: "image" },
+      (error, result) => {
+        if (error) throw error;
+        return result;
+      }
+    );
 
-    // ✅ Delete local file after upload
-    fs.unlinkSync(filePath);
-
-    return uploadResult.secure_url;
+    // Write buffer to stream
+    const streamifier = await import("streamifier");
+    streamifier.createReadStream(fileBuffer).pipe(uploadResult);
 
   } catch (error) {
-    console.error("Cloudinary Upload Error:", error);
-
-    // ❗ Always delete file even if upload fails
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
-    }
-
-    // ❗ Instead of returning res.status... throw error to be handled in controller
+    console.error("Cloudinary Upload Error:", error.message);
     throw new Error("Cloudinary upload failed");
   }
 };
+
 
 export default uploadOnCloudinary;
