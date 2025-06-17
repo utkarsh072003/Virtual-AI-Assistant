@@ -11,7 +11,7 @@ import geminiResponse from "./gemini.js";
 
 const app = express();
 app.use(cors({
-    origin:"https://virtual-ai-assistant-theta.vercel.app",
+    origin:"https://virtual-ai-assistant-theta.vercel.app/",
     credentials:true
 }))
 app.use(cookieParser())
