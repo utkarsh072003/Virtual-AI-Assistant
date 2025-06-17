@@ -32,7 +32,7 @@ export const updateAssisatnt = async (req, res) => {
   assistantImage = await uploadOnCloudinary(req.file.buffer, req.file.mimetype);
 }
  // ✅ use buffer
-    } else {
+     else {
       assistantImage = imageUrl;
     }
 
