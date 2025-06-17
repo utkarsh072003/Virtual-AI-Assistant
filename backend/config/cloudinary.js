@@ -11,25 +11,21 @@ cloudinary.config({
 
 
 
-const uploadOnCloudinary = async (fileBuffer) => {
+const uploadOnCloudinary = async (buffer, mimetype) => {
   try {
-    const uploadResult = await cloudinary.uploader.upload_stream(
-      { resource_type: "image" },
-      (error, result) => {
-        if (error) throw error;
-        return result;
-      }
-    );
+    const base64String = buffer.toString("base64");
+    const dataUri = `data:${mimetype};base64,${base64String}`;
 
-    // Write buffer to stream
-    const streamifier = await import("streamifier");
-    streamifier.createReadStream(fileBuffer).pipe(uploadResult);
+    const uploadResult = await cloudinary.uploader.upload(dataUri);
 
+    return uploadResult.secure_url;
   } catch (error) {
-    console.error("Cloudinary Upload Error:", error.message);
+    console.error("Cloudinary Upload Error:", error);
     throw new Error("Cloudinary upload failed");
   }
 };
+
+
 
 
 export default uploadOnCloudinary;
