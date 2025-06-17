@@ -22,18 +22,16 @@ export const getCurrentUser = async(req,res) => {
  }
 }
 
+// controllers/userController.js
 export const updateAssisatnt = async (req, res) => {
   try {
-    console.log("UserID:", req.userId);
-    console.log("Body:", req.body);
-    console.log("File:", req.file);
-
     const { assistantName, imageUrl } = req.body;
-
     let assistantImage;
 
-    if (req.file) {
-      assistantImage = await uploadOnCloudinary(req.file.path);
+   if (req.file) {
+  assistantImage = await uploadOnCloudinary(req.file.buffer, req.file.mimetype);
+}
+ // ✅ use buffer
     } else {
       assistantImage = imageUrl;
     }
@@ -45,12 +43,12 @@ export const updateAssisatnt = async (req, res) => {
     ).select("-password");
 
     return res.status(200).json(user);
-
   } catch (error) {
     console.error("Update Assistant Error:", error.message);
     return res.status(400).json({ message: "Update assistant failed", error: error.message });
   }
 };
+
 
 export const askToAssistant = async(req, res)=>{
    try {
