@@ -7,7 +7,7 @@ export const userDataContext = createContext();
 
   const UserContext = ({children}) => {
    
-   const serverUrl= "https://virtual-ai-assistant-epgh.vercel.app" 
+   const serverUrl= "https://virtual-ai-assistant.onrender.com" 
    const [userData, setUserData] = useState(null)
     const [frontendImage, setFrontendImage] = useState(null)
     const [backendImage, setBackendImage] = useState(null)
